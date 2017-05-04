@@ -30,7 +30,7 @@ void BSTree::insert(const string &inserted, Node* curr)
         {
             curr->right = new Node();       // new node is initialized as leaf.
             curr->right->data = inserted;
-        }a
+        }
     }
     else
     {

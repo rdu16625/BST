@@ -10,7 +10,7 @@ using namespace std;
 class BSTree {
 
 private:
-  Node* root;
+  Node* root=0;
   int count;
 
 private:
