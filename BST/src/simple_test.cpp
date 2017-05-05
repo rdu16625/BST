@@ -1,4 +1,4 @@
-
+/*
 #include <iostream>
 #include "BSTree.h"
 
@@ -30,7 +30,9 @@ int main( ) {
   tree.insert("words");   // 10
   tree.insert("cow");     // 3
   tree.insert("wings");   // 9
-//  tree.insert("aid");     // 1
+  tree.insert("aid");     // 1
+  tree.insert("vans");
+  tree.insert("hippy");
 
   printOrders(&tree);     
   cout << "----------------------------------------------------------------" 
@@ -64,4 +66,4 @@ int main( ) {
        << endl;
 
   return 0;
-}
+}*/

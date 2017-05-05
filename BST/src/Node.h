@@ -9,8 +9,8 @@ using namespace std;
 class Node
 {
   public:
-    Node *right;
     Node *left;
+    Node *right;
     string data;
     Node () : left(0), right(0) {}      // constructor
 

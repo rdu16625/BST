@@ -235,39 +235,11 @@ int BSTree::heightCounter(Node* curr) const
 // removes node with the value
 void BSTree::remove(const string &str)
 {
-    /*
-    five cases:
-
-    Item not found
-    Removing a leaf
-    Removing a node with one child - right only
-    Removing a node with one child - left only
-    Removing a node with two children
-    */
-
     remove(str, root);
 }
-/*
-Remove a specified string from the tree. 
-Be sure to maintain all binary search tree properties. 
-If removing a node with a count greater than 1, just decrement 
-the count, otherwise, if the count is simply 1, remove the node. 
-You MUST follow the remove algorithm shown in the slides and discussed 
-in class or else your program will not pass the test functions. When 
-removing, if removing a leaf node, simply remove the leaf. Otherwise, 
-if the node to remove has a left child, replace the node to remove 
-with the largest string value that is smaller than the current string 
-to remove (i.e. find the largest value in the left subtree of the 
-node to remove). If the node has no left child, replace the node to 
-remove with the smallest value larger than the current string to 
-remove (i.e. find the smallest value in the right subtree of the node 
-to remove).
-*/
 
 void BSTree::remove(const string &str, Node* curr)
 {
-    string large = " ";
-    string small = " ";
     if (curr->isLeaf() && curr->data == str) // found and is leaf.
     {
             delete curr;
@@ -282,24 +254,27 @@ void BSTree::remove(const string &str, Node* curr)
         {
             remove(str, curr->right);
         }
-        else //---------IDK----------
+        else
         {
-            if (curr->left != 0)
+            string large = " ";
+            string small = " ";
+            if (curr->left != 0)            // find smallest or largest value.
             {
                 large = largest(curr->left);
-                remove(large, curr->left);
             }
-            if (curr->right != 0)
+            else
             {
                 small = smallest(curr->right);
             }
             if (large != " ")
             {
                 curr->data = large;         // replace data
+                remove(large, curr->left);
             }
             else if (small != " ")
             {
                 curr->data = small;         // replace data
+                remove(small, curr->right);
             }
         }
     }  
