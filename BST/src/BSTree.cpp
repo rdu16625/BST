@@ -118,10 +118,15 @@ void BSTree::inOrder(Node* curr) const
     {
         inOrder(curr->left);
         cout << curr->data;
-        cout << "(" << curr->count << "), ";
+        cout << "(" << curr->count << "), " << endl;
         inOrder(curr->right);
     }
+    else
+    {
+        cout << "";
+    }
 }
+
 
 // prints tree postOrder
 void BSTree::postOrder() const
@@ -137,6 +142,10 @@ void BSTree::postOrder(Node* curr) const
         postOrder(curr->right);
         cout << curr->data;
         cout << "(" << curr->count << "), ";
+    }
+    else
+    {
+        cout << "";
     }
 }
 
@@ -154,6 +163,10 @@ void BSTree::preOrder(Node* curr) const
         cout << "(" << curr->count << "), ";
         preOrder(curr->left);
         preOrder(curr->right);
+    }
+    else
+    {
+        cout << "";
     }
 }
 
@@ -281,11 +294,11 @@ void BSTree::remove(const string &str, Node* curr, Node* parent)
 {
     if(search(str))
     {
-        //curr = searchNode(str, curr, parent);
-        cout << "before" << curr->data << endl;
+        curr = searchNode(str, curr, parent);
+        parent = searchParent(str, curr, parent);
+
         if (curr->count > 1)
         {
-            cout << "after" << curr->data << endl;
             curr->count--;
         }
         else if (curr->isLeaf())
@@ -294,6 +307,8 @@ void BSTree::remove(const string &str, Node* curr, Node* parent)
             {
                 delete curr;
                 delete root;
+                root = 0;
+                curr = 0;
             }
             else if (parent->left == curr)
             {
@@ -304,6 +319,7 @@ void BSTree::remove(const string &str, Node* curr, Node* parent)
                 parent->right = 0;
             }
             delete curr;
+            curr = 0;
         }
         else if (!curr->isLeaf())
         {
@@ -338,6 +354,7 @@ void BSTree::remove(const string &str, Node* curr, Node* parent)
                        curr->right = 0;
                    }
                    delete temp;
+                   temp = 0;
                 }
                 else
                 {
@@ -366,6 +383,7 @@ void BSTree::remove(const string &str, Node* curr, Node* parent)
                        curr->right = 0;
                    }
                    delete temp;
+                   temp = 0;
                }
                else
                {
@@ -378,28 +396,40 @@ void BSTree::remove(const string &str, Node* curr, Node* parent)
 
 Node* BSTree::searchNode(const string &str, Node* curr, Node* parent)
 {
-    if (curr->data != str)              // search
+    if ((curr->isLeaf() && str != curr->data))
     {
-        if (curr == root)
-        {
-            if(str < curr->data)
-            {
-                searchNode(str, curr->left, curr);
-            }
-            else if (str > curr->data)
-            {
-                searchNode(str, curr->right, curr);
-            }
-        }
-        else if (str < curr->data)
-        {
-            searchNode(str, curr->left, curr);
-        }
-        else if (str > curr->data)
-        {
-            searchNode(str, curr->right, curr);
-        }
+        return 0;       // couldnt find value
     }
+    if (str < curr->data)
+    {
+        return searchNode(str, curr->left,curr);
+    }
+    else if (str > curr->data)
+    {
+        return searchNode(str, curr->right,curr);
+    }
+    else
+    {
+        return curr;        // found same value
+    }
+}
 
-    return curr;
+Node* BSTree::searchParent(const string &str, Node* curr, Node* parent)
+{
+    if ((curr->isLeaf() && str != curr->data))
+    {
+        return 0;       // couldnt find value
+    }
+    if (str < curr->data)
+    {
+        return searchParent(str, curr->left,curr);
+    }
+    else if (str > curr->data)
+    {
+        return searchParent(str, curr->right,curr);
+    }
+    else
+    {
+        return parent;        // found same value
+    }
 }

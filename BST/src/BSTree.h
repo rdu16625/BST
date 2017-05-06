@@ -24,6 +24,7 @@ private:
 	int heightCounter(Node*) const;
 	void remove(const string &, Node*, Node*);
 	Node* searchNode(const string &, Node*, Node*);
+	Node* searchParent(const string &, Node*, Node*);
 
 public:
 	BSTree() : root(0) {}
