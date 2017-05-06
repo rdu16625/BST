@@ -281,103 +281,125 @@ void BSTree::remove(const string &str, Node* curr, Node* parent)
 {
     if(search(str))
     {
-        if (curr->data != str)              // search
+        //curr = searchNode(str, curr, parent);
+        cout << "before" << curr->data << endl;
+        if (curr->count > 1)
         {
-            if (curr == root)
-            {
-                if(str < curr->data)
-                {
-                    remove(str, curr->left, root);
-                }
-                else if (str > curr->data)
-                {
-                    remove(str, curr->right, root);
-                }
-            }
-            else if (str < curr->data)
-            {
-                if (curr == parent->left)
-                {
-                    remove(str, curr->left, parent->left);
-                }
-                else if (curr == parent->right)
-                {
-                    remove(str, curr->left, parent->right);
-                }
-            }
-            else if (str > curr->data)
-            {
-                if (curr == parent->left)
-                {
-                    remove(str, curr->right, parent->left);
-                }
-                else if (curr == parent->right)
-                {
-                    remove(str, curr->right, parent->right);
-                }
-            }
+            cout << "after" << curr->data << endl;
+            curr->count--;
         }
-        else
+        else if (curr->isLeaf())
         {
-            if (curr->count > 1)
+            if(curr == root)
             {
-                curr->count--;
-            }
-            if (curr->isLeaf())
-            {
-                if(curr == root)
-                {
-                    delete curr;
-                    delete root;
-                }
-                else if (parent->left == curr)
-                {
-                    parent->left = 0;
-                }
-                else if (parent->right == curr)
-                {
-                    parent->right = 0;
-                }
                 delete curr;
+                delete root;
             }
-            else if (!curr->isLeaf())
+            else if (parent->left == curr)
             {
-                string large = " ";
-                string small = " ";
-                if (curr->left != 0)            // find smallest or largest value.
+                parent->left = 0;
+            }
+            else if (parent->right == curr)
+            {
+                parent->right = 0;
+            }
+            delete curr;
+        }
+        else if (!curr->isLeaf())
+        {
+            string large = " ";
+            string small = " ";
+            Node* temp;
+            if (curr->left != 0)            // find smallest or largest value.
+            {
+                large = largest(curr->left);
+            }
+            else
+            {
+                small = smallest(curr->right);
+            }
+            if (large != " ")
+            {
+                temp = searchNode(large, curr->left, curr);
+                //get largeNode*
+
+                curr->data = temp->data;
+                curr->count = temp->count;
+                temp->count = 1;
+
+                if(temp->isLeaf())
                 {
-                    large = largest(curr->left);
+                   if (curr->left == temp)
+                   {
+                       curr->left = 0;
+                   }
+                   else
+                   {
+                       curr->right = 0;
+                   }
+                   delete temp;
                 }
                 else
                 {
-                    small = smallest(curr->right);
+                    remove(large, curr->left, curr);
                 }
-                if (large != " ")
-                {
-                    curr->data = large;         // replace data
 
-                    if (curr == parent->right)
-                    {
-                        remove(large, curr->left, parent->right);
-                    }
-                    else if (curr == parent->left)
-                    {
-                        remove(large, curr->left, parent->left);
-                    }
-                }
-                else if (small != " ")
-                {
-                    curr->data = small;         // replace data
-                    if (curr == parent->right)
-                    {
-                        remove(small, curr->right, parent->right);
-                    }
-                    else if (curr == parent->left)
-                    {
-                        remove(small, curr->right, parent->left);
-                    }
-                }
+
+            }
+            else if (small != " ")
+            {
+                temp = searchNode(small, curr->right, curr);
+
+                curr->data = temp->data;
+                curr->count = temp->count;
+                temp->count = 1;
+
+
+               if(temp->isLeaf())
+               {
+                   if (curr->left == temp)
+                   {
+                       curr->left = 0;
+                   }
+                   else
+                   {
+                       curr->right = 0;
+                   }
+                   delete temp;
+               }
+               else
+               {
+                   remove(small, curr->right, curr);
+               }
             }
         }
     }
+}
+
+Node* BSTree::searchNode(const string &str, Node* curr, Node* parent)
+{
+    if (curr->data != str)              // search
+    {
+        if (curr == root)
+        {
+            if(str < curr->data)
+            {
+                searchNode(str, curr->left, curr);
+            }
+            else if (str > curr->data)
+            {
+                searchNode(str, curr->right, curr);
+            }
+        }
+        else if (str < curr->data)
+        {
+            searchNode(str, curr->left, curr);
+        }
+        else if (str > curr->data)
+        {
+            searchNode(str, curr->right, curr);
+        }
+    }
+
+    return curr;
 }

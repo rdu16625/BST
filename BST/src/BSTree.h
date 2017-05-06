@@ -1,4 +1,4 @@
-#ifndef __BSTREE_H__
+ #ifndef __BSTREE_H__
 #define __BSTREE_H__
 
 #include <iostream>
@@ -23,7 +23,7 @@ private:
 	int height(const string &, Node*) const;
 	int heightCounter(Node*) const;
 	void remove(const string &, Node*, Node*);
-	void searchNode(const string&, Node*, Node*);
+	Node* searchNode(const string &, Node*, Node*);
 
 public:
 	BSTree() : root(0) {}
