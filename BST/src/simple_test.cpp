@@ -23,10 +23,10 @@ int main( ) {
   cout << "Test 1: Testing simple insert" << endl;
   tree.insert("hello");   // 7
   tree.insert("delete");  // 4
-  tree.insert("hoppy");   // 8 
-  tree.insert("gadget");  // 6 
+  tree.insert("hoppy");   // 8
+  tree.insert("gadget");  // 6
   tree.insert("edward");  // 5
-  tree.insert("annie");   // 2  
+  tree.insert("annie");   // 2
   tree.insert("words");   // 10
   tree.insert("cow");     // 3
   tree.insert("wings");   // 9
@@ -34,8 +34,8 @@ int main( ) {
   tree.insert("vans");
   tree.insert("hippy");
 
-  printOrders(&tree);     
-  cout << "----------------------------------------------------------------" 
+  printOrders(&tree);
+  cout << "----------------------------------------------------------------"
        << endl;
   cout << "Test 2: Search testing" << endl;
   if (tree.search("hello")) {
@@ -43,27 +43,29 @@ int main( ) {
   } else {
     cout << "Failed" << endl;
   }
-  cout << "----------------------------------------------------------------" 
+  cout << "----------------------------------------------------------------"
        << endl;
   cout << "Test 3: Smallest value in the tree is..." << endl;
   cout << tree.smallest( ) << endl;
-  cout << "----------------------------------------------------------------" 
+  cout << "----------------------------------------------------------------"
        << endl;
   cout << "Test 4: Largest value in the tree is..." << endl;
   cout << tree.largest( ) << endl;
-  cout << "----------------------------------------------------------------" 
+  cout << "----------------------------------------------------------------"
        << endl;
   cout << "Test 5: Testing subtree heights" << endl;
-  cout << "Height of subtree rooted at \"hello\" = " 
+  cout << "Height of subtree rooted at \"hello\" = "
        << tree.height("hello") << endl;
-  cout << "----------------------------------------------------------------" 
+  cout << "----------------------------------------------------------------"
        << endl;
   cout << "Test 6: Remove testing" << endl;
   cout << "Removing \"hoppy\"" << endl;
   tree.remove("hello");
   printOrders(&tree);
-  cout << "----------------------------------------------------------------" 
+  cout << "----------------------------------------------------------------"
        << endl;
 
   return 0;
 }
+// idk lololol
+

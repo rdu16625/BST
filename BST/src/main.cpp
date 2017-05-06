@@ -20,7 +20,7 @@ int menu() {
   cout << endl << "Enter menu choice: ";
   cout << endl;
   cout
-    << "1. Insert" << endl
+    << "1. Insertnew" << endl
     << "2. Remove" << endl
     << "3. Print" << endl
     << "4. Search" << endl
