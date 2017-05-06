@@ -11,17 +11,10 @@ class Node
   public:
     Node *left;
     Node *right;
+    int count;
     string data;
-    Node () : left(0), right(0) {}      // constructor
-
-    bool isLeaf()
-    {
-        if (left == 0 && right == 0)
-        {
-            return true;
-        }
-        return false;
-    }
+    Node () : left(0), right(0), count(0) {}      // constructor
+    bool isLeaf();
 };
 
 #endif

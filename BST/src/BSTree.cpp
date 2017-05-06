@@ -2,9 +2,11 @@
 
 #include <iostream>
 #include <string>
+#include <stdexcept>
 
 
 using namespace std;
+
 
 // insert value into correct node
 void BSTree::insert(const string &inserted)
@@ -18,18 +20,25 @@ void BSTree::insert(const string &inserted, Node* curr)
     {
         root = new Node();
         root->data = inserted;
+        root->count++;
     }
     else if (curr->isLeaf())
     {
         if (inserted < curr->data)
         {
             curr->left = new Node();        // new node is initialized as leaf.
+            curr->left->count++;
             curr->left->data = inserted;
         }
         else if (inserted > curr->data)
         {
             curr->right = new Node();       // new node is initialized as leaf.
+            curr->right->count++;
             curr->right->data = inserted;
+        }
+        else
+        {
+            curr->count++;
         }
     }
     else
@@ -39,6 +48,7 @@ void BSTree::insert(const string &inserted, Node* curr)
             if (curr->left == 0)
             {
                 curr->left = new Node();
+                curr->left->count++;
                 curr->left->data = inserted;
             }
             else
@@ -51,12 +61,17 @@ void BSTree::insert(const string &inserted, Node* curr)
             if (curr->right == 0)
             {
                 curr->right = new Node();
+                curr->count++;
                 curr->right->data = inserted;
             }
             else
             {
                 insert(inserted, curr->right);
             }
+        }
+        else
+        {
+            curr->count++;
         }
     }
 }
@@ -69,7 +84,11 @@ bool BSTree::search(const string &duplicate) const
 
 bool BSTree::search(const string &duplicate, Node* curr) const
 {
-    if (curr->isLeaf() && duplicate != curr->data)
+    if (curr == 0)
+    {
+        return false;
+    }
+    if ((curr->isLeaf() && duplicate != curr->data))
     {
         return false;       // couldnt find value
     }
@@ -98,7 +117,8 @@ void BSTree::inOrder(Node* curr) const
     if (curr != 0)
     {
         inOrder(curr->left);
-        cout << curr->data << " ";
+        cout << curr->data;
+        cout << "(" << curr->count << "), ";
         inOrder(curr->right);
     }
 }
@@ -115,7 +135,8 @@ void BSTree::postOrder(Node* curr) const
     {
         postOrder(curr->left);
         postOrder(curr->right);
-        cout << curr->data << " ";
+        cout << curr->data;
+        cout << "(" << curr->count << "), ";
     }
 }
 
@@ -129,7 +150,8 @@ void BSTree::preOrder(Node* curr) const
 {
     if (curr != 0)
     {
-        cout << curr->data <<" ";
+        cout << curr->data;
+        cout << "(" << curr->count << "), ";
         preOrder(curr->left);
         preOrder(curr->right);
     }
@@ -143,6 +165,10 @@ string BSTree::smallest() const
 
 string BSTree::smallest(Node* curr) const
 {
+    if (curr == 0)
+    {
+        return "";
+    }
     if (!curr->isLeaf() && curr->left != 0)
     {
         return smallest(curr->left);
@@ -162,6 +188,10 @@ string BSTree::largest() const
 
 string BSTree::largest(Node* curr) const
 {
+    if (curr == 0)
+    {
+        return "";
+    }
     if (!curr->isLeaf() && curr->right != 0)
     {
         return largest(curr->right);
@@ -190,9 +220,9 @@ int BSTree::height(const string &start) const
 
 int BSTree::height(const string &start, Node* curr) const
 {
-    if (root == 0)
+    if (curr == 0)
     {
-        return 0;
+        return -1;
     }
     if (start < curr->data)                 // first search for word
     {
@@ -218,64 +248,136 @@ int BSTree::heightCounter(Node* curr) const
     {
         if (curr->left == 0)                    // if left is empty
         {
-            return heightCounter(curr->right) + 1;
+            return heightCounter(curr->right);
         }
         else if (curr->right == 0)
         {
-            return heightCounter(curr->left) + 1;
+            return heightCounter(curr->left);
         }
         else
         {
-            return heightCounter(curr->left) + 1;
-            return heightCounter(curr->right) + 1;
+            int heightLeft = heightCounter(curr->left) + 1;
+            int heightRight = heightCounter(curr->right) + 1;
+            if (heightLeft > heightRight)
+            {
+                return heightLeft;
+            }
+            else
+            {
+                return heightRight;
+            }
         }
     }
 }
+
 
 // removes node with the value
 void BSTree::remove(const string &str)
 {
-    remove(str, root);
+    remove(str, root, root);
 }
 
-void BSTree::remove(const string &str, Node* curr)
+void BSTree::remove(const string &str, Node* curr, Node* parent)
 {
-    if (curr->isLeaf() && curr->data == str) // found and is leaf.
+    if(search(str))
     {
-            delete curr;
-    }
-    else if (!curr->isLeaf())               // not leaf.
-    {
-        if (str < curr->data)               // look for data
+        if (curr->data != str)              // search
         {
-            remove(str, curr->left);
-        }
-        else if (str > curr->data)
-        {
-            remove(str, curr->right);
+            if (curr == root)
+            {
+                if(str < curr->data)
+                {
+                    remove(str, curr->left, root);
+                }
+                else if (str > curr->data)
+                {
+                    remove(str, curr->right, root);
+                }
+            }
+            else if (str < curr->data)
+            {
+                if (curr == parent->left)
+                {
+                    remove(str, curr->left, parent->left);
+                }
+                else if (curr == parent->right)
+                {
+                    remove(str, curr->left, parent->right);
+                }
+            }
+            else if (str > curr->data)
+            {
+                if (curr == parent->left)
+                {
+                    remove(str, curr->right, parent->left);
+                }
+                else if (curr == parent->right)
+                {
+                    remove(str, curr->right, parent->right);
+                }
+            }
         }
         else
         {
-            string large = " ";
-            string small = " ";
-            if (curr->left != 0)            // find smallest or largest value.
+            if (curr->count > 1)
             {
-                large = largest(curr->left);
+                curr->count--;
             }
-            else
+            if (curr->isLeaf())
             {
-                small = smallest(curr->right);
+                if(curr == root)
+                {
+                    delete curr;
+                    delete root;
+                }
+                else if (parent->left == curr)
+                {
+                    parent->left = 0;
+                }
+                else if (parent->right == curr)
+                {
+                    parent->right = 0;
+                }
+                delete curr;
             }
-            if (large != " ")
+            else if (!curr->isLeaf())
             {
-                curr->data = large;         // replace data
-                remove(large, curr->left);
-            }
-            else if (small != " ")
-            {
-                curr->data = small;         // replace data
-                remove(small, curr->right);
+                string large = " ";
+                string small = " ";
+                if (curr->left != 0)            // find smallest or largest value.
+                {
+                    large = largest(curr->left);
+                }
+                else
+                {
+                    small = smallest(curr->right);
+                }
+                if (large != " ")
+                {
+                    curr->data = large;         // replace data
+
+                    if (curr == parent->right)
+                    {
+                        remove(large, curr->left, parent->right);
+                    }
+                    else if (curr == parent->left)
+                    {
+                        remove(large, curr->left, parent->left);
+                    }
+                }
+                else if (small != " ")
+                {
+                    curr->data = small;         // replace data
+                    if (curr == parent->right)
+                    {
+                        remove(small, curr->right, parent->right);
+                    }
+                    else if (curr == parent->left)
+                    {
+                        remove(small, curr->right, parent->left);
+                    }
+                }
             }
         }
-    }  
+    }
 }
