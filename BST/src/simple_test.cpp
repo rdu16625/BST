@@ -1,4 +1,4 @@
-/*
+
 #include <iostream>
 #include "BSTree.h"
 
@@ -60,10 +60,10 @@ int main( ) {
        << endl;
   cout << "Test 6: Remove testing" << endl;
   cout << "Removing \"hoppy\"" << endl;
-  tree.remove("hoppy");
+  tree.remove("hello");
   printOrders(&tree);
   cout << "----------------------------------------------------------------" 
        << endl;
 
   return 0;
-}*/
+}
